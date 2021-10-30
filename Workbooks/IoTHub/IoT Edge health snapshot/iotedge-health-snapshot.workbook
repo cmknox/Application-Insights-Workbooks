@@ -10,7 +10,7 @@
         ],
         "parameters": [
           {
-            "id": "1f74ed9a-e3ed-498d-bd5b-f68f3836a117",
+            "id": "77bfa16e-fc72-4512-91c9-96a91ea3d67a",
             "version": "KqlParameterItem/1.0",
             "name": "Subscription",
             "label": "Subscriptions",
@@ -30,7 +30,7 @@
             "defaultValue": "value::all"
           },
           {
-            "id": "b616a3a3-4271-4208-b1a9-a92a78efed08",
+            "id": "0fc43a15-1944-4bfc-b423-d4c613027386",
             "version": "KqlParameterItem/1.0",
             "name": "ResourceGroups",
             "label": "Resource groups",
@@ -57,7 +57,7 @@
             "resourceType": "microsoft.resourcegraph/resources"
           },
           {
-            "id": "0e85e0e4-a7e8-4ea8-b291-e444c317843a",
+            "id": "c2741f8e-a613-49f1-a91b-a4c78eb15fe0",
             "version": "KqlParameterItem/1.0",
             "name": "ResourceTypes",
             "label": "Resource types",
@@ -267,6 +267,19 @@
         ],
         "parameters": [
           {
+            "id": "f4fb8978-c4d7-455c-97ed-db96f0edaa0e",
+            "version": "KqlParameterItem/1.0",
+            "name": "SelectedHub",
+            "type": 1,
+            "isGlobal": true,
+            "query": "print \"myhub\";",
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "queryType": 0,
+            "resourceType": "microsoft.devices/iothubs"
+          },
+          {
             "id": "1613525f-d44c-47d6-b556-154edf69b3b0",
             "version": "KqlParameterItem/1.0",
             "name": "SelectedDevice",
@@ -368,6 +381,17 @@
             },
             "queryType": 0,
             "resourceType": "microsoft.devices/iothubs"
+          },
+          {
+            "id": "fa036298-2969-4c9b-8990-c7551a68c650",
+            "version": "KqlParameterItem/1.0",
+            "name": "iothubPath",
+            "type": 1,
+            "isGlobal": true,
+            "query": "let hubLabels = split(\"{IoTHub:label}\", \", \");\r\nlet hubValues = split(\"{IoTHub:value}\", \",\");\r\nlet index = array_index_of(hubLabels, \"{SelectedHub}\");\r\nlet hubPath = iif(index >= 0, trim(@\"'\", tostring(hubValues[index])), \"Unselected_IoT_Hub_Error\");\r\nprint hubPath;",
+            "isHiddenWhenLocked": true,
+            "queryType": 0,
+            "resourceType": "microsoft.devices/iothubs"
           }
         ],
         "style": "pills",
@@ -466,6 +490,11 @@
               "passSpecificParams": true,
               "templateParameters": [
                 {
+                  "name": "SelectedHub",
+                  "source": "parameter",
+                  "value": "SelectedHub"
+                },
+                {
                   "name": "SelectedDevice",
                   "source": "parameter",
                   "value": "SelectedDevice"
@@ -489,11 +518,6 @@
                   "name": "ResourceTypes",
                   "source": "parameter",
                   "value": "ResourceTypes"
-                },
-                {
-                  "name": "IoTHub",
-                  "source": "parameter",
-                  "value": "IoTHub"
                 }
               ]
             }
@@ -513,14 +537,14 @@
                   "value": "devicePath"
                 },
                 {
-                  "name": "resourceId",
-                  "source": "parameter",
-                  "value": "IoTHub"
-                },
-                {
                   "name": "title",
                   "source": "parameter",
                   "value": "SelectedDevice"
+                },
+                {
+                  "name": "resourceId",
+                  "source": "parameter",
+                  "value": "iothubPath"
                 }
               ]
             }
